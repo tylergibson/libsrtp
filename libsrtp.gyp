@@ -3,15 +3,13 @@
 # found in the LICENSE file.
 
 {
-  'variables': {
-    'use_openssl%': 1,
-  },
   'target_defaults': {
     'defines': [
       'HAVE_CONFIG_H',
       'HAVE_STDLIB_H',
       'HAVE_STRING_H',
       'TESTAPP_SOURCE',
+      'OPENSSL',
     ],
     'include_dirs': [
       './config',
@@ -21,11 +19,6 @@
       '../boringssl/src/include',
     ],
     'conditions': [
-      ['use_openssl==1', {
-        'defines': [
-          'OPENSSL',
-        ],
-      }],
       ['os_posix==1', {
         'defines': [
           'HAVE_INT16_T',
@@ -193,7 +186,7 @@
         'srtp/crypto/rng/rand_source.c',
       ],
       'conditions': [
-        ['use_openssl==1', {
+        ['1==1', {
           'dependencies': [
             '<(DEPTH)/third_party/boringssl/boringssl.gyp:boringssl',
           ],
@@ -352,6 +345,7 @@
       'type': 'executable',
       'dependencies': [
         'libsrtp',
+        '<(DEPTH)/third_party/boringssl/boringssl.gyp:boringssl',
       ],
       'sources': [
         'srtp/crypto/test/cipher_driver.c',
@@ -359,11 +353,6 @@
         'srtp/test/getopt_s.c',
       ],
       'conditions': [
-        ['use_openssl==1', {
-          'dependencies': [
-            '<(DEPTH)/third_party/boringssl/boringssl.gyp:boringssl',
-          ],
-        }],
         ['OS=="win" and OS_RUNTIME=="winrt"', {
           'type': 'static_library',
           'defines': [
